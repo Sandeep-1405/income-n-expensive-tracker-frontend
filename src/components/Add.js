@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import HOC from "./HOC";
 
 const Add = () => {
   const [name, setName] = useState("");
@@ -74,4 +75,4 @@ const Add = () => {
   );
 };
 
-export default Add;
+export default HOC(Add);

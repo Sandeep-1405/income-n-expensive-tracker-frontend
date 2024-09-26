@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, {useState} from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
+import HOC from './HOC';
 
 function Update(){
 
@@ -82,4 +83,4 @@ function Update(){
         </div>
     )
 }
-export default Update
+export default HOC(Update)

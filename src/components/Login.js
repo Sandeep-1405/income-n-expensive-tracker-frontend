@@ -3,7 +3,6 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import auth from "../firebase/firebase";
 import { useNavigate } from "react-router";
-//import "./LoginPage.css"; // Optional: You can add custom CSS here
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +14,9 @@ const LoginPage = () => {
     signInWithEmailAndPassword(auth,email,password)
     .then(res=>{
         console.log(res)
-        navigate('/home')
+        localStorage.setItem('accessToken',res.user.accessToken)
+        localStorage.setItem('displayName',res.user.displayName)
+        navigate('/')
     })
     .catch(error=>{
         console.log(error)
@@ -56,7 +57,7 @@ const LoginPage = () => {
           </button>
         </form>
         <p className="mt-3 text-center">
-          Don't have an account? <a href="/">Register here</a>
+          Don't have an account? <a href="/signup">Register here</a>
         </p>
       </div>
     </div>
