@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import HOC from './HOC';
 
@@ -7,24 +7,37 @@ function Update(){
 
     const [name, setName] = useState("");
     const [date, setDate] = useState("");
-    const [amount, setAmount] = useState("");
+    const [area, setArea] = useState("");
+    const [amount, setAmount] = useState(0);
     const [description, setDescription] = useState("");
-    const [errors, setErrors] = useState("");
 
     const {id} = useParams();
     const navigate  = useNavigate();
 
+    console.log(id)
+
+    useEffect(()=>{
+        const fetchData = async()=>{
+            await axios.get('http://localhost:3001/worker/'+id)
+            .then(res =>{
+                //console.log(res.data.worker);
+                setName(res.data.worker.name)
+                setDate(res.data.worker.date)
+                setArea(res.data.worker.area)
+                setAmount(res.data.worker.amount)
+                setDescription(res.data.worker.description)
+            }).catch(err => console.log(err));
+        }
+        fetchData();
+    },[])
+
     function handleSubmit(event){
         event.preventDefault();
-        /*if (name.length === 0 || email.length ===0 || dob.length === 0){
-            seterrors("All Fields are Mandatory")
-        }else{
-            axios.put('http://localhost:8081/update/' + id,{name,email,dob})
-            .then(res =>{
-                //console.log(res);
-                navigate('/');
-            }).catch(err => console.log(err));
-        }*/
+        axios.put('http://localhost:3001/worker/' + id,{name,date,area,amount,description})
+        .then(res =>{
+            //console.log(res);
+            navigate('/');
+        }).catch(err => console.log(err));
     }
 
     return(
@@ -55,6 +68,18 @@ function Update(){
                         />
                     </div>
                     <div className="mb-3">
+                        <label htmlFor="area" className="form-label">Area</label>
+                        <input
+                        type="text"
+                        className="form-control"
+                        id="area"
+                        placeholder="Enter Area"
+                        value={area}
+                        onChange={(e) => setArea(e.target.value)}
+                        required
+                        />
+                    </div>
+                    <div className="mb-3">
                         <label htmlFor="amount" className="form-label">Amount</label>
                         <input
                         type="number"
@@ -78,7 +103,6 @@ function Update(){
                     </div>
                     <button type="submit" className="btn btn-primary w-100">Submit</button>
                 </form>
-                <p className='text-danger m-3'>{errors}</p>
             </div>
         </div>
     )

@@ -25,7 +25,7 @@ const Home = () => {
     }
   }, [owner]);
 
-  const totalAmount = displayList.reduce((total, worker) => total + worker.amount, 0);
+  const totalAmount = displayList.reduce((total, worker) => total + parseInt(worker.amount), 0);
 
   const onClickLogout = () => {
     auth.signOut()
@@ -41,8 +41,15 @@ const Home = () => {
 
   const handleDelete = async(id) =>{
     try{
-        await axios.delete('http://localhost:3001/user/'+id)
-        window.location.reload()
+        await axios.delete('http://localhost:3001/workers/'+id)
+        .then(() => {
+          console.log("worker deleted");
+          window.location.reload()
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+        
     }catch(err){
         console.log(err)
     }
@@ -59,7 +66,8 @@ const Home = () => {
         setDisplayList(res.data.workers);
       })
       .catch(error => {
-        console.error("Error fetching workers by Name:", error);
+        alert("Error fetching workers by Name")
+        console.error("Error fetching workers by Name");
       });
     }else{
       alert('Name Required')
@@ -73,6 +81,7 @@ const Home = () => {
         setDisplayList(res.data.workers);
       })
       .catch(error => {
+        alert("Error fetching workers by Area")
         console.error("Error fetching workers by Area:", error);
       });
     }else{

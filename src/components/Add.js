@@ -1,19 +1,28 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HOC from "./HOC";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 const Add = () => {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
-  const [amount, setAmount] = useState("");
+  const [area, setArea] = useState("");
+  const [amount, setAmount] = useState(0);
   const [description, setDescription] = useState("");
+  const owner = localStorage.getItem('displayName') || "Unknown User";
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Name: ", name);
-    console.log("Date: ", date);
-    console.log("Amount: ", amount);
-    console.log("Description: ", description);
+    axios.post('http://localhost:3001/workers',{name,date,area,amount,description,owner})
+    .then(res=>{
+      console.log(res)
+      navigate('/')
+    })
+    .catch(error=>{
+      console.log(error)
+    })
     
   };
 
@@ -43,6 +52,18 @@ const Add = () => {
               id="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="area" className="form-label">Area</label>
+            <input
+              type="text"
+              className="form-control"
+              id="area"
+              placeholder="Enter Area"
+              value={area}
+              onChange={(e) => setArea(e.target.value)}
               required
             />
           </div>
