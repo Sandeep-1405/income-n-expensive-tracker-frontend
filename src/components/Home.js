@@ -25,7 +25,11 @@ const Home = () => {
     }
   }, [owner]);
 
+  const paid = displayList.reduce((total, worker) => total + parseInt(worker.paid), 0);
+
   const totalAmount = displayList.reduce((total, worker) => total + parseInt(worker.amount), 0);
+
+  const due = displayList.reduce((total, worker) => total + parseInt(worker.due), 0);
 
   const onClickLogout = () => {
     auth.signOut()
@@ -61,13 +65,14 @@ const Home = () => {
 
   const onClickSearchByName = () =>{
     if (inputText !== ""){
-      axios.get('http://localhost:3001/search-by-name/'+inputText)
+      axios.post('http://localhost:3001/search-by-name/',{inputText})
       .then(res => {
+        console.log(res.data.workers)
         setDisplayList(res.data.workers);
       })
       .catch(error => {
-        alert("Error fetching workers by Name")
-        console.error("Error fetching workers by Name");
+        alert("Not Found")
+        console.error(error);
       });
     }else{
       alert('Name Required')
@@ -81,7 +86,7 @@ const Home = () => {
         setDisplayList(res.data.workers);
       })
       .catch(error => {
-        alert("Error fetching workers by Area")
+        alert("Not Found")
         console.error("Error fetching workers by Area:", error);
       });
     }else{
@@ -96,9 +101,20 @@ const Home = () => {
         <button className="btn btn-success mb-4" onClick={onClickBtn}>Add New</button>
         <button className="btn btn-primary mb-4" onClick={onClickLogout}>Logout</button>
       </div>
-      <h3 className="display-4 text-center my-4 text-primary">
-        Total: {totalAmount} Rs
-      </h3>
+
+      <div className="d-flex justify-content-around">
+        <h6 className="display-6 text-center my-4 text-primary">
+          Paid: {paid} Rs
+        </h6>{/*display is for text size and it ranges from 1 to 6*/}
+
+        <h6 className="display-6 text-center my-4 text-primary">
+          Due: {due} Rs
+        </h6>
+
+        <h3 className="display-6 text-center my-4 text-primary">
+          Total: {totalAmount} Rs
+        </h3>
+      </div>
 
       <div className="input-group mb-3">
         <input 
@@ -108,6 +124,7 @@ const Home = () => {
           aria-label="Search"
           value={inputText}
           onChange={(e)=>setInputText(e.target.value)}
+          
         />
         <div className="input-group-append">
           <button className="btn btn-outline-primary" type="button" onClick={onClickSearchByName}>
@@ -126,25 +143,30 @@ const Home = () => {
             <h4 className="text-center text-muted">Workers Details Not Found</h4>
           </div>
         ) : (
-          <table className="table table-striped">
+          <table className="table table-striped text-center">
           <thead>
             <tr>
               <th>Name</th>
               <th>Area</th>
               <th>Date</th>
+              <th>Paid</th>
+              <th>Due</th>
               <th>Amount</th>
-              <th>Description</th>
+              
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {displayList.map((worker) => (
+            {displayList.sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date, newest first
+            .map((worker) => (
               <tr key={worker.id}>
                 <td>{worker.name}</td>
                 <td>{worker.area}</td>
                 <td>{worker.date}</td>
+                <td>{worker.paid}</td>
+                <td>{worker.due}</td>
                 <td>{worker.amount}</td>
-                <td>{worker.description ? worker.description : 'N/A'}</td>
+      
                 <td>
                   <Link to={`/edit/${worker.id}`} className="btn btn-warning btn-sm m-1">Edit</Link>
                   <button className="btn btn-danger btn-sm m-1" onClick={() => handleDelete(worker.id)}>

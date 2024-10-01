@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HOC from "./HOC";
 import axios from "axios";
@@ -8,14 +8,20 @@ const Add = () => {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [area, setArea] = useState("");
+  const [paid, setPaid] = useState(0);
+  const [due, setDue] = useState(0);
   const [amount, setAmount] = useState(0);
-  const [description, setDescription] = useState("");
+  
   const owner = localStorage.getItem('displayName') || "Unknown User";
   const navigate = useNavigate();
 
+  useEffect(()=>{
+    setAmount(parseInt(paid) + parseInt(due))
+  },[paid,due])
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3001/workers',{name,date,area,amount,description,owner})
+    axios.post('http://localhost:3001/workers',{name,date,area,paid,due,amount,owner})
     .then(res=>{
       console.log(res)
       navigate('/')
@@ -28,7 +34,7 @@ const Add = () => {
 
   return (
     <div className="container my-5">
-      <h1 className="text-center mb-4">Add New</h1>
+  
       <div className="card p-4 shadow w-100 mx-auto" style={{ maxWidth: "600px" }}>
         <h2 className="text-center mb-4">Enter Details</h2>
         <form onSubmit={handleSubmit}>
@@ -67,8 +73,35 @@ const Add = () => {
               required
             />
           </div>
+
           <div className="mb-3">
-            <label htmlFor="amount" className="form-label">Amount</label>
+            <label htmlFor="paid" className="form-label">Paid</label>
+            <input
+              type="number"
+              className="form-control"
+              id="paid"
+              placeholder="Enter paid amount"
+              value={paid}
+              onChange={(e) => setPaid(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="due" className="form-label">Due</label>
+            <input
+              type="number"
+              className="form-control"
+              id="due"
+              placeholder="Enter due amount"
+              value={due}
+              onChange={(e) => setDue(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="amount" className="form-label">Total Amount</label>
             <input
               type="number"
               className="form-control"
@@ -77,18 +110,10 @@ const Add = () => {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
+              disabled
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="description" className="form-label">Description (Optional)</label>
-            <textarea
-              className="form-control"
-              id="description"
-              placeholder="Enter description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            ></textarea>
-          </div>
+          
           <button type="submit" className="btn btn-primary w-100">Submit</button>
         </form>
       </div>
