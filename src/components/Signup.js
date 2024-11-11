@@ -31,7 +31,8 @@ const SignupPage = () => {
         navigate('/login')
     })
     .catch(error=>{
-        console.log(error)
+      alert(error.message)
+      console.log(error)
     })
   };
 
