@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import LoginPage from './Login';
+import { useNavigate } from 'react-router';
 
 export default function HOC(WrappedComponent) {
     return function AuthenticatedComponent() {
         const [isToken, setIsToken] = useState(null); 
+        const navigate = useNavigate();
 
         useEffect(() => {
             const token = localStorage.getItem('accessToken'); 
@@ -17,6 +19,6 @@ export default function HOC(WrappedComponent) {
         if (isToken === null) {
             return <div>Loading...</div>; 
         }
-        return isToken ? <WrappedComponent  /> : <LoginPage />;
+        return isToken ? <WrappedComponent  /> : navigate('/login');
     };
 }

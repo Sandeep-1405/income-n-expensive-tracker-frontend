@@ -15,6 +15,9 @@ function Update(){
     const {id} = useParams();
     const navigate  = useNavigate();
 
+    const email = localStorage.getItem('email') || "Not loggedIn ";
+    const owner = email.replace('@gmail.com',"")
+
     //console.log(id)
 
     useEffect(()=>{
@@ -23,15 +26,15 @@ function Update(){
 
     useEffect(()=>{
         const fetchData = async()=>{
-            await axios.get('http://localhost:3001/worker/'+id)
+            await axios.get(`http://localhost:3001/${owner}/expensive/${id}`)
             .then(res =>{
-                console.log(res.data.worker);
-                setName(res.data.worker.name)
-                setDate(res.data.worker.date)
-                setArea(res.data.worker.area)
-                setPaid(res.data.worker.paid)
-                setDue(res.data.worker.due)
-                setAmount(res.data.worker.amount)
+                //console.log(res.data.Expensive);
+                setName(res.data.Expensive.name)
+                setDate(res.data.Expensive.date)
+                setArea(res.data.Expensive.area)
+                setPaid(res.data.Expensive.paid)
+                setDue(res.data.Expensive.due)
+                setAmount(res.data.Expensive.amount)
             }).catch(err => console.log(err));
         }
         fetchData();
@@ -39,10 +42,10 @@ function Update(){
 
     function handleSubmit(event){
         event.preventDefault();
-        axios.put('http://localhost:3001/worker/' + id,{name,date,area,paid,due,amount})
+        axios.put(`http://localhost:3001/${owner}/expensive/${id}`,{name,date,area,paid,due,amount})
         .then(res =>{
-            console.log(res);
-            navigate('/');
+            //console.log(res);
+            navigate('/expens');
         }).catch(err => console.log(err));
     }
 

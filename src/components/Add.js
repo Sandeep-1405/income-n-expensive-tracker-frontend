@@ -11,9 +11,10 @@ const Add = () => {
   const [paid, setPaid] = useState(0);
   const [due, setDue] = useState(0);
   const [amount, setAmount] = useState(0);
-  
-  const owner = localStorage.getItem('displayName') || "Unknown User";
+
   const navigate = useNavigate();
+  const email = localStorage.getItem('email') || "Not loggedIn ";
+  const docName = email.replace('@gmail.com',"")
 
   useEffect(()=>{
     setAmount(parseInt(paid) + parseInt(due))
@@ -21,10 +22,10 @@ const Add = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3001/workers',{name,date,area,paid,due,amount,owner})
+    axios.post('http://localhost:3001/expensive',{name,date,area,paid,due,amount,docName})
     .then(res=>{
-      console.log(res)
-      navigate('/')
+      //console.log(res)
+      navigate('/expens')
     })
     .catch(error=>{
       console.log(error)
