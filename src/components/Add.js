@@ -28,6 +28,7 @@ const Add = () => {
       navigate('/expens')
     })
     .catch(error=>{
+      
       console.log(error)
     })
     

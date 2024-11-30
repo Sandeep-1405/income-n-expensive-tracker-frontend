@@ -22,11 +22,11 @@ const Expens = () => {
         .get(`http://localhost:3001/expensives/${owner}`)
         .then((res) => {
           setDisplayList(res.data.Expensives);
-          setLoading(false); // Stop loading
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching workers:", error);
-          setLoading(false); // Stop loading on error
+          setLoading(false); 
         });
     }
   }, [owner]);
@@ -55,43 +55,31 @@ const Expens = () => {
     navigate("/add");
   };
 
-  const onClickSearchByName = () => {
-    if (inputText !== "") {
-      setLoading(true); // Show loading
-      axios
-        .post("http://localhost:3001/search-by-name/", { inputText })
-        .then((res) => {
-          setDisplayList(res.data.workers);
-          setLoading(false); // Stop loading
-        })
-        .catch((error) => {
-          alert("Not Found");
-          console.error(error);
-          setLoading(false); // Stop loading on error
-        });
-    } else {
-      alert("Name Required");
+  const onChangeSearch = async (e) => {
+    const input = e.target.value;
+    setInputText(input); // Update state
+  
+    if (!input) {
+      // If input is cleared, fetch all data
+      try {
+        const res = await axios.get(`http://localhost:3001/expensives/${owner}`);
+        setDisplayList(res.data.Expensives); // Update list with all data
+      } catch (error) {
+        console.error('Error fetching all data:', error);
+      }
+      return;
+    }
+  
+    // Otherwise, search by input
+    try {
+      const res = await axios.get(`http://localhost:3001/${owner}/search/${input}`);
+      setDisplayList(res.data.Expensives); // Update list with search results
+    } catch (error) {
+      console.error('Error searching:', error);
     }
   };
+  
 
-  const onClickSearchByArea = () => {
-    if (inputText !== "") {
-      setLoading(true); // Show loading
-      axios
-        .get(`http://localhost:3001/search-by-area/${inputText}`)
-        .then((res) => {
-          setDisplayList(res.data.workers);
-          setLoading(false); // Stop loading
-        })
-        .catch((error) => {
-          alert("Not Found");
-          console.error("Error fetching workers by Area:", error);
-          setLoading(false); // Stop loading on error
-        });
-    } else {
-      alert("Area Required");
-    }
-  };
 
   return (
     <div className="container mt-5">
@@ -114,16 +102,16 @@ const Expens = () => {
           placeholder="Search By Name/Area..."
           aria-label="Search"
           value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
+          onChange={(e) => onChangeSearch(e)}
         />
-        <div className="input-group-append">
+        {/* <div className="input-group-append">
           <button className="btn btn-outline-primary" type="button" onClick={onClickSearchByName}>
             Search by Name
           </button>
           <button className="btn btn-outline-secondary" type="button" onClick={onClickSearchByArea}>
             Search by Area
           </button>
-        </div>
+        </div>*/}
       </div>
 
       {loading ? (
