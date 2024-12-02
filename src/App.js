@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import React, { lazy, Suspense } from 'react';
+import AddCategory from './components/AddCategory';
 
 // Lazy load components
 const Login = lazy(() => import('./components/Login'));
@@ -11,7 +12,8 @@ const Add = lazy(() => import('./components/Add'));
 const Update = lazy(() => import('./components/Update'));
 const Expens = lazy(() => import('./components/expens'));
 const Income = lazy(() => import('./components/Income'));
-const Notes = lazy(()=> import('./components/Notes'))
+const Notes = lazy(()=> import('./components/Notes'));
+const Profile = lazy(()=> import('./components/Profile'));
 
 function App() {
   const location = useLocation();
@@ -21,10 +23,9 @@ function App() {
 
   return (
     <>
-      {/* Conditionally render Navbar */}
+      
       {!noNav.includes(location.pathname) && <Navbar />}
 
-      {/* Wrap Routes with Suspense for lazy loading */}
       <Suspense fallback={<div className='text-center text-primary'><h1>Loading...</h1></div>}>
         <Routes>
           <Route path="/signup" element={<Signup />} />
@@ -35,6 +36,7 @@ function App() {
           <Route path="/edit/:id" element={<Update />} />
           <Route path="/income" element={<Income />} />
           <Route path="/notes" element={<Notes />} />
+          <Route path="/add-category" element={<AddCategory />} />
         </Routes>
       </Suspense>
     </>

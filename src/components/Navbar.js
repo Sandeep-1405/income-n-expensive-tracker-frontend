@@ -48,8 +48,11 @@ const Navbar = () => {
             <li className="nav-item mx-md-5">
               <Link className="nav-link" to="/notes">Notes</Link>
             </li>
+            <li className="nav-item mx-md-5">
+              <Link className="nav-link" to="/add-category">Add Category</Link>
+            </li>
             <li className="nav-item ms-md-5">
-              {/* Logout button in navbar */}
+             
               <button className="btn btn-outline-light w-100 mt-2 mt-md-0" onClick={onClickLogout}>
                 {token ? "Logout" : "Login"}
               </button>

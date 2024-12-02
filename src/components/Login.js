@@ -21,6 +21,8 @@ const Login = () => {
         localStorage.setItem('accessToken', res.user.accessToken);
         localStorage.setItem('displayName', res.user.displayName);
         localStorage.setItem('email', res.user?.email);
+        const owner = email.replace('@gmail.com','');
+        localStorage.setItem('owner', owner);
         setDisplayName(res.user?.displayName)
         setUserEmail(res.user?.email)
         console.log(res)

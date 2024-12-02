@@ -11,34 +11,45 @@ const Add = () => {
   const [paid, setPaid] = useState(0);
   const [due, setDue] = useState(0);
   const [amount, setAmount] = useState(0);
+  const [category, setCategory] = useState("");
 
   const navigate = useNavigate();
-  const email = localStorage.getItem('email') || "Not loggedIn ";
-  const docName = email.replace('@gmail.com',"")
+  const [categories, setCategories] = useState([]);
+  const owner = localStorage.getItem('owner');
 
-  useEffect(()=>{
-    setAmount(parseInt(paid) + parseInt(due))
-  },[paid,due])
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/${owner}/category`);
+        setCategories(res.data.categories);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, [owner]);
+
+  useEffect(() => {
+    setAmount(parseInt(paid) + parseInt(due));
+  }, [paid, due]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3001/expensive',{name,date,area,paid,due,amount,docName})
-    .then(res=>{
-      //console.log(res)
-      navigate('/expens')
-    })
-    .catch(error=>{
-      
-      console.log(error)
-    })
-    
+    axios
+      .post('http://localhost:3001/expensive', { name, date, area, paid, due, amount,category, owner })
+      .then((res) => {
+        console.log(res);
+        navigate('/expens');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
     <div className="container my-5">
-  
-      <div className="card p-4 shadow w-100 mx-auto" style={{ maxWidth: "600px" }}>
-        <h2 className="text-center mb-4">Enter Details</h2>
+      <div className="card p-4 shadow-lg rounded w-100 mx-auto" style={{ maxWidth: "600px" }}>
+        
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="name" className="form-label">Name</label>
@@ -115,8 +126,25 @@ const Add = () => {
               disabled
             />
           </div>
-          
-          <button type="submit" className="btn btn-primary w-100">Submit</button>
+
+          <div className="mb-3">
+            <label htmlFor="category" className="form-label">Category</label>
+            <select
+              id="category"
+              className="form-select"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.category}>
+                  {category.category}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button type="submit" className="btn btn-primary w-100 py-2 mt-3">Submit</button>
         </form>
       </div>
     </div>
