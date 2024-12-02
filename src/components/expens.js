@@ -84,25 +84,9 @@ const Expens = () => {
 
     if (!input && selectedFilter ==='All') {
       setLoading(true)
-      try {
-        const res = await axios.get(`http://localhost:3001/expensives/${owner}`);
-        setLoading(false)
-        setDisplayList(res.data.Expensives);
-      } catch (error) {
-        setLoading(false)
-        console.error("Error fetching all data:", error);
-      }
-      return;
-    }else if (input.length !== 0 && selectedFilter === 'All'){
-      try {
-        setLoading(true)
-        const res = await axios.get(`http://localhost:3001/${owner}/search/${input}`);
-        setLoading(false)
-        setDisplayList(res.data.Expensives);
-      } catch (error) {
-        setLoading(false)
-        console.error("Error searching:", error);
-      }
+      fetchExpensives();
+    }else if (input && selectedFilter === 'All'){
+      fetchExpBySearchInput(input);
     }
     else{
       fetchExpByCatnSearch(selectedFilter,input);
@@ -115,7 +99,7 @@ const Expens = () => {
       setLoading(true)
       const res = await axios.get(`http://localhost:3001/${owner}/expensives/${category}`)
       setDisplayList(res.data.Expensives)
-      console.log(res)
+      //console.log(res)
       setLoading(false);
     }catch(error){
       setLoading(false)
@@ -125,16 +109,33 @@ const Expens = () => {
     }
   }
 
-  const handleFilterChange = (value) => {
+  const handleFilterChange = async(value) => {
+
     setSelectedFilter(value);
+  
     if (value === 'All' && inputText.length === 0){
       fetchExpensives();
-    }else if (value !== 'All' && inputText.length === 0){
+    }else if (inputText && value === 'All'){
+      fetchExpBySearchInput(inputText);
+    }
+    else if (value !== 'All' && inputText.length === 0){
       fetchExpensivesByCategory(value)
     }else{
       fetchExpByCatnSearch(value,inputText)
     }
   };
+
+  const fetchExpBySearchInput = async(inputText) =>{
+    try {
+      setLoading(true)
+      const res = await axios.get(`http://localhost:3001/${owner}/search/${inputText}`);
+      setLoading(false)
+      setDisplayList(res.data.Expensives);
+    } catch (error) {
+      setLoading(false)
+      console.error("Error searching:", error);
+    }
+  }
 
   const fetchExpByCatnSearch = async(selectedFilter,inputText) =>{
     console.log(`${selectedFilter}  ${inputText}`)

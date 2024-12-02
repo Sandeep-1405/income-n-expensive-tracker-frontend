@@ -38,8 +38,16 @@ const Add = () => {
     axios
       .post('http://localhost:3001/expensive', { name, date, area, paid, due, amount,category, owner })
       .then((res) => {
-        console.log(res);
-        navigate('/expens');
+        //console.log(res);
+        //navigate('/expens');
+        alert('Added');
+        setName('')
+        setDate('')
+        setArea('')
+        setPaid(0)
+        setDue(0)
+        setAmount(0)
+        setCategory('')
       })
       .catch((error) => {
         console.log(error);
