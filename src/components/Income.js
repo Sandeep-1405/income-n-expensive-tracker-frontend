@@ -29,40 +29,26 @@ const Income = () => {
     if (owner !== "Unknown User") {
       setLoading(true);
       axios
-        .get(`http://localhost:3001/${owner}/${type}`)
+        .get(`http://localhost:3001/get/${owner}/${type}`)
         .then((res) => {
-          console.log(res.data)
+          //console.log(res.data)
           setDisplayList(res.data.List);
           setLoading(false);
         })
         .catch((error) => {
-          console.error("Error fetching workers:", error);
+          console.error("Error fetching:", error);
           setLoading(false);
         });
     }
   }
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await axios.get(`http://localhost:3001/${owner}/category`);
-        setCategories(res.data.categories);
-      } catch (error) {
-        if (window.confirm("Please add Categories first. Do you want to go to Add Categories?")) {
-          navigate("/add-category");
-        }
-        console.error("Error fetching categories:", error);
-      }
-    };
-    fetchCategories();
-  }, [owner]);
 
   const handleDelete = async (id) => {
     try {
       await axios
         .delete(`http://localhost:3001/${owner}/${type}/${id}`)
         .then(() => {
-          console.log("Income deleted");
+          //console.log("Income deleted");
           window.location.reload();
         })
         .catch((error) => {
@@ -70,7 +56,7 @@ const Income = () => {
         });
     } catch (err) {
       alert("Sorry, Somthing went wrong!!!")
-      console.log(err);
+      //console.log(err);
     }
   };
 
@@ -100,7 +86,7 @@ const Income = () => {
       setLoading(false);
     }catch(error){
       setLoading(false)
-      console.log(error)
+      //console.log(error)
       alert('Something went wrong, Please try again later')
       
     }
@@ -136,7 +122,7 @@ const Income = () => {
   }
 
   const fetchExpByCatnSearch = async(selectedFilter,inputText) =>{
-    console.log(`${selectedFilter}  ${inputText}`)
+    //console.log(`${selectedFilter}  ${inputText}`)
 
     try{
       setLoading(true)
@@ -147,12 +133,12 @@ const Income = () => {
         }
       })
       setLoading(false)
-      console.log(res)
+      //console.log(res)
       setDisplayList(res.data.Incomes)
     }catch(error){
       setLoading(false)
       alert("Sorry, Somthing went wrong!!!");
-      console.log(error)
+      //console.log(error)
     }
   }
 

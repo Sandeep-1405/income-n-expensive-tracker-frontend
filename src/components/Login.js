@@ -25,7 +25,7 @@ const Login = () => {
         localStorage.setItem('owner', owner);
         setDisplayName(res.user?.displayName)
         setUserEmail(res.user?.email)
-        console.log(res)
+        //console.log(res)
         navigate('/');
         //window.location.reload();
         

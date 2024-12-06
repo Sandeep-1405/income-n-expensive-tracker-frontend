@@ -14,7 +14,7 @@ const AddCategory = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`http://localhost:3001/${owner}/category`);
+      const res = await axios.get(`http://localhost:3001/category/${owner}`);
       setCategories(res.data.categories); // Assuming the response contains categories
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -23,10 +23,10 @@ const AddCategory = () => {
 
   const onSubmitForm = (e) => {
     e.preventDefault();
-    console.log(category);
+    //console.log(category);
 
     axios
-      .post(`http://localhost:3001/${owner}/category`, { category })
+      .post(`http://localhost:3001/category/${owner}`, { category })
       .then((res) => {
         console.log(res.data);
         alert('Category Added');
@@ -39,7 +39,7 @@ const AddCategory = () => {
 
   const handleDelete = (categoryId) => {
     axios
-      .delete(`http://localhost:3001/${owner}/category/${categoryId}`)
+      .delete(`http://localhost:3001/${owner}/Categories/${categoryId}`)
       .then((res) => {
         alert('Category Deleted');
         fetchCategories(); // Re-fetch categories to reflect the changes
@@ -49,7 +49,7 @@ const AddCategory = () => {
 
   const handleUpdate = (categoryId, updatedCategory) => {
     axios
-      .put(`http://localhost:3001/${owner}/category/${categoryId}`, {
+      .put(`http://localhost:3001/category/${owner}/${categoryId}`, {
         category: updatedCategory,
       })
       .then((res) => {

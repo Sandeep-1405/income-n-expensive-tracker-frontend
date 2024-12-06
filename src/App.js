@@ -3,6 +3,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import React, { lazy, Suspense } from 'react';
 import AddCategory from './components/AddCategory';
+import AddNotes from './components/AddNotes';
 
 // Lazy load components
 const Login = lazy(() => import('./components/Login'));
@@ -31,12 +32,13 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
-          <Route path="/expensives" element={<Expens />} />
+          <Route path="/expensive" element={<Expens />} />
           <Route path="/:type/add" element={<Add />} />
           <Route path="/:type/update/:id" element={<Update />} />
           <Route path="/income" element={<Income />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/add-category" element={<AddCategory />} />
+          <Route path="/add-note" element={<AddNotes />} />
         </Routes>
       </Suspense>
     </>

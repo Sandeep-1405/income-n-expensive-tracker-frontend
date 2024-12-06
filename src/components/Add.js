@@ -23,10 +23,10 @@ const Add = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/${owner}/category`);
+        const res = await axios.get(`http://localhost:3001/category/${owner}`);
         setCategories(res.data.categories);
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        //console.error('Error fetching categories:', error);
       }
     };
     fetchCategories();
@@ -39,10 +39,10 @@ const Add = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:3001/${type}`, { name, date, area, paid, due, amount,category, owner, type })
+      .post(`http://localhost:3001/create`, { name, date, area, paid, due, amount,category, owner, type })
       .then((res) => {
-        console.log(res);
-        //navigate('/expens');
+        //console.log(res);
+        navigate(`/${type}`);
         alert('Added');
         setName('')
         setDate('')
@@ -53,7 +53,7 @@ const Add = () => {
         setCategory('')
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
       });
   };
 
