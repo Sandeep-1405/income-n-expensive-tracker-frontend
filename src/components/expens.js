@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import HOC from "./HOC";
+import DisplayList from "./DisplayList";
 
 const Expens = () => {
   const navigate = useNavigate();
@@ -207,70 +208,21 @@ const Expens = () => {
           <input
             type="search"
             className="form-control"
-            placeholder="Search by Name/Area..."
+            placeholder="Search by Name/Area&Crop..."
             value={inputText}
             onChange={(e) => onChangeSearch(e)}
           />
         </div>
 
         <div className="col-lg-2 text-md-end text-center">
-          <button className="btn btn-primary w-100" onClick={() => navigate("/add")}>
+          <button className="btn btn-primary w-100" onClick={() => navigate(`/expensives/add`)}>
             Add Expensive
           </button>
         </div>
       </div>
 
-      {/* Display Table */}
-      {loading ? (
-        <div className="text-center">
-          <h4>Loading...</h4>
-        </div>
-      ) : displayList.length === 0 ? (
-        <div className="text-center">
-          <h4 className="text-muted">No Expensives Found</h4>
-        </div>
-      ) : (
-        <table className="table table-striped text-center">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Area</th>
-              <th>Date</th>
-              <th>Category</th>
-              <th>Paid</th>
-              <th>Due</th>
-              <th>Total</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {displayList
-              .sort((a, b) => new Date(b.date) - new Date(a.date))
-              .map((worker) => (
-                <tr key={worker.id}>
-                  <td>{worker.name}</td>
-                  <td>{worker.area}</td>
-                  <td>{worker.date}</td>
-                  <td>{worker.category}</td>
-                  <td>{worker.paid}</td>
-                  <td>{worker.due}</td>
-                  <td>{worker.amount}</td>
-                  <td>
-                    <Link to={`/edit/${worker.id}`} className="btn btn-warning btn-sm me-2">
-                      Edit
-                    </Link>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDelete(worker.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      )}
+      <DisplayList loading={loading} displayList={displayList} handleDelete={handleDelete}/>
+
     </div>
   );
 };

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Filter = () => {
+const Filter = ({handleFilterChange}) => {
   const [categories, setCategories] = useState([]);
   const owner = localStorage.getItem('owner');
 
@@ -20,26 +20,22 @@ const Filter = () => {
   }, [owner]);
 
   return (
-    <div className="">
-      <div className="">
-        <div className="">
-          <div className="d-flex justify-content-between">
-            <h3>Filter</h3>
-            <div className='d-flex '>
-                <label htmlFor='select' className='m-2'>Category</label>
-            
-                <select className="form-select" aria-label="Select category">
-                <option value="">All</option>
-                {categories.map((category) => (
-                    <option value={category.id} key={category.id}>
-                    {category.category}
-                    </option>
-                ))}
-                </select>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="col-lg-4 col-md-6 mb-3 mb-lg-0 d-md-flex">
+      <label htmlFor="select" className="form-label fw-bold m-2">
+        Category:
+      </label>
+      <select
+        className="form-select"
+        aria-label="Select category"
+        onChange={(e) => handleFilterChange(e.target.value)}
+      >
+        <option value="All" defaultValue="All" >All</option>
+        {categories.map((category) => (
+          <option value={category.category} key={category.id}>
+            {category.category}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };

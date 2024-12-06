@@ -13,11 +13,10 @@ function Update() {
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState([]);
 
-  const { id } = useParams();
+  const { type,id } = useParams();
   const navigate = useNavigate();
 
-  const email = localStorage.getItem('email') || 'Not loggedIn';
-  const owner = email.replace('@gmail.com', '');
+  const owner = localStorage.getItem('owner');
 
   useEffect(() => {
     setAmount(parseInt(paid) + parseInt(due));
@@ -26,14 +25,15 @@ function Update() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/${owner}/expensive/${id}`);
-        setName(res.data.Expensive.name);
-        setDate(res.data.Expensive.date);
-        setArea(res.data.Expensive.area);
-        setPaid(res.data.Expensive.paid);
-        setDue(res.data.Expensive.due);
-        setAmount(res.data.Expensive.amount);
-        setCategory(res.data.Expensive.category); // Set the category from the data
+        const res = await axios.get(`http://localhost:3001/${owner}/${type}/${id}`);
+        //console.log(res.data)
+        setName(res.data.List.name);
+        setDate(res.data.List.date);
+        setArea(res.data.List.area);
+        setPaid(res.data.List.paid);
+        setDue(res.data.List.due);
+        setAmount(res.data.List.amount);
+        setCategory(res.data.List.category);
       } catch (err) {
         console.log(err);
       }
@@ -42,11 +42,10 @@ function Update() {
   }, [id, owner]);
 
   useEffect(() => {
-    // Fetch categories to populate the select dropdown
     const fetchCategories = async () => {
       try {
         const res = await axios.get(`http://localhost:3001/${owner}/category`);
-        setCategories(res.data.categories); // Assuming response contains a list of categories
+        setCategories(res.data.categories);
       } catch (err) {
         console.log('Error fetching categories:', err);
       }
@@ -57,9 +56,9 @@ function Update() {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .put(`http://localhost:3001/${owner}/expensive/${id}`, { name, date, area, paid, due, amount, category })
+      .put(`http://localhost:3001/${type}/${id}`, { name, date, area, paid, due, amount, category,owner })
       .then((res) => {
-        navigate('/expens');
+        navigate('/income');
       })
       .catch((err) => console.log(err));
   };
@@ -92,7 +91,7 @@ function Update() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="area" className="form-label">Area</label>
+            <label htmlFor="area" className="form-label">Area&Crop</label>
             <input
               type="text"
               className="form-control"

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HOC from "./HOC";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 const Add = () => {
   const [name, setName] = useState("");
@@ -16,6 +16,9 @@ const Add = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const owner = localStorage.getItem('owner');
+
+  const {type} = useParams();
+  //console.log(type)
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -36,9 +39,9 @@ const Add = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post('http://localhost:3001/expensive', { name, date, area, paid, due, amount,category, owner })
+      .post(`http://localhost:3001/${type}`, { name, date, area, paid, due, amount,category, owner, type })
       .then((res) => {
-        //console.log(res);
+        console.log(res);
         //navigate('/expens');
         alert('Added');
         setName('')
@@ -83,7 +86,7 @@ const Add = () => {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="area" className="form-label">Area</label>
+            <label htmlFor="area" className="form-label">Area&Crop</label>
             <input
               type="text"
               className="form-control"
@@ -142,6 +145,7 @@ const Add = () => {
               className="form-select"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
+              required
             >
               <option value="">Select Category</option>
               {categories.map((category) => (
