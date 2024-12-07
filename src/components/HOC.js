@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import LoginPage from './Login';
 import { useNavigate } from 'react-router';
 
 export default function HOC(WrappedComponent) {

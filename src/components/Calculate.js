@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 
-const Calculate = ({displayList}) => {
-    //console.log("Calculate comp", displayList)
+const Calculate = ({displayList,type}) => {
     let paid;
     let totalAmount;
     let due;
@@ -24,11 +23,12 @@ const Calculate = ({displayList}) => {
         () => displayList.reduce((total, income) => total + parseInt(income.due), 0),
         [displayList]
       );
+      localStorage.setItem(type,totalAmount)
     return (
         <div className="row text-center mb-4">
         <div className="col-4">
           <div className="p-3 bg-light shadow rounded">
-            <h5 className="text-success">Paid</h5>
+            <h5 className="text-success">{type === "expensive" ? "Paid" : "Received"}</h5>
             <p className="fs-5 fw-bold">{paid} Rs</p>
           </div>
         </div>

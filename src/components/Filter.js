@@ -10,7 +10,7 @@ const Filter = ({handleFilterChange}) => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get(`http://localhost:3001/category/${owner}`);
-        console.log(res);
+        //console.log(res);
         setCategories(res.data.categories);
       } catch (error) {
         console.error('Error fetching categories:', error);

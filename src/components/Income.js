@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useNavigate } from "react-router";
 import axios from "axios";
 import HOC from "./HOC";
 import DisplayList from "./DisplayList";
@@ -8,14 +7,12 @@ import Calculate from "./Calculate";
 import Filter from "./Filter";
 import Search from "./Search";
 import AddButton from "./AddButton";
-import { Link } from "react-router-dom";
 
 const Income = () => {
-  const navigate = useNavigate();
+  
   const [displayList, setDisplayList] = useState([] || null);
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("All");
 
   const owner = localStorage.getItem("owner");
@@ -42,7 +39,6 @@ const Income = () => {
     }
   }
 
-
   const handleDelete = async (id) => {
     try {
       await axios
@@ -61,91 +57,43 @@ const Income = () => {
   };
 
   const onChangeSearch = async (e) => {
-
     const input = e.target.value;
     setInputText(input);
-
-    if (!input && selectedFilter ==='All') {
-      setLoading(true)
-      fetchIncomes();
-    }else if (input && selectedFilter === 'All'){
-      fetchExpBySearchInput(input);
-    }
-    else{
-      fetchExpByCatnSearch(selectedFilter,input);
-    }
+    fetchByCatnSearch(selectedFilter,input)
   };
 
-  const fetchExpensivesByCategory = async(category) =>{
-
-    try{
-      setLoading(true)
-      const res = await axios.get(`http://localhost:3001/${owner}/${type}/${category}`)
-      setDisplayList(res.data.Expensives)
-      //console.log(res)
-      setLoading(false);
-    }catch(error){
-      setLoading(false)
-      //console.log(error)
-      alert('Something went wrong, Please try again later')
-      
-    }
-  }
 
   const handleFilterChange = async(value) => {
-
     setSelectedFilter(value);
-  
-    if (value === 'All' && inputText.length === 0){
-      fetchIncomes();
-    }else if (inputText && value === 'All'){
-      fetchExpBySearchInput(inputText);
-    }
-    else if (value !== 'All' && inputText.length === 0){
-      fetchExpensivesByCategory(value)
-    }else{
-      fetchExpByCatnSearch(value,inputText)
-    }
+    fetchByCatnSearch(value,inputText)
   };
 
-  const fetchExpBySearchInput = async(inputText) =>{
-    try {
-      setLoading(true)
-      const res = await axios.get(`http://localhost:3001/${owner}/${type}/search/${inputText}`);
-      setLoading(false)
-      setDisplayList(res.data.Incomes);
-    } catch (error) {
-      setLoading(false)
-      console.error("Error searching:", error);
-      alert("Sorry, Somthing went wrong!!!");
-    }
-  }
 
-  const fetchExpByCatnSearch = async(selectedFilter,inputText) =>{
-    //console.log(`${selectedFilter}  ${inputText}`)
+  const fetchByCatnSearch = async(selectedFilter,inputText) =>{
+    console.log(`${selectedFilter}  ${inputText}`)
 
     try{
       setLoading(true)
       const res = await axios.get(`http://localhost:3001/${owner}/${type}`,{
         params:{
-          category: selectedFilter,
-          searchInput:inputText,
+          category: selectedFilter || 'All',
+          searchInput:inputText || '',
         }
       })
       setLoading(false)
-      //console.log(res)
-      setDisplayList(res.data.Incomes)
+      console.log(res)
+      setDisplayList(res.data.List)
     }catch(error){
       setLoading(false)
       alert("Sorry, Somthing went wrong!!!");
-      //console.log(error)
+      console.log(error)
     }
   }
 
   return (
     <div className="container mt-4">
       
-      <Calculate displayList={displayList} />
+      <Calculate displayList={displayList} type={type}/>
 
       <div className="row align-items-center mb-4">
         
