@@ -6,15 +6,15 @@ const AddCategory = () => {
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState([]);
   const owner = localStorage.getItem('owner');
+  const url = process.env.REACT_APP_BACKEND_URL
 
-  // Fetch categories on component mount
   useEffect(() => {
     fetchCategories();
   }, [owner]);
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`http://localhost:3001/category/${owner}`);
+      const res = await axios.get(`${url}/category/${owner}`);
       setCategories(res.data.categories); // Assuming the response contains categories
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -26,7 +26,7 @@ const AddCategory = () => {
     //console.log(category);
 
     axios
-      .post(`http://localhost:3001/category/${owner}`, { category })
+      .post(`${url}/category/${owner}`, { category })
       .then((res) => {
         console.log(res.data);
         alert('Category Added');
@@ -39,7 +39,7 @@ const AddCategory = () => {
 
   const handleDelete = (categoryId) => {
     axios
-      .delete(`http://localhost:3001/${owner}/Categories/${categoryId}`)
+      .delete(`${url}/${owner}/Categories/${categoryId}`)
       .then((res) => {
         alert('Category Deleted');
         fetchCategories(); // Re-fetch categories to reflect the changes
@@ -49,7 +49,7 @@ const AddCategory = () => {
 
   const handleUpdate = (categoryId, updatedCategory) => {
     axios
-      .put(`http://localhost:3001/category/${owner}/${categoryId}`, {
+      .put(`${url}/${owner}/${categoryId}`, {
         category: updatedCategory,
       })
       .then((res) => {

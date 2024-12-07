@@ -5,11 +5,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const Filter = ({handleFilterChange}) => {
   const [categories, setCategories] = useState([]);
   const owner = localStorage.getItem('owner');
+  const url = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/category/${owner}`);
+        const res = await axios.get(`${url}/category/${owner}`);
         //console.log(res);
         setCategories(res.data.categories);
       } catch (error) {

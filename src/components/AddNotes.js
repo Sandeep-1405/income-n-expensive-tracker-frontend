@@ -8,6 +8,7 @@ const AddNotes = () => {
     const [description, setDescription] = useState('');
     const owner = localStorage.getItem('owner');
     const type = 'notes'
+    const url = process.env.REACT_APP_BACKEND_URL
 
     const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ const AddNotes = () => {
         e.preventDefault();
         
         try{
-            const res = await axios.post(`http://localhost:3001/create`,{heading,description,owner,type});
+            const res = await axios.post(`${url}/create`,{heading,description,owner,type});
             //console.log(res)
             navigate('/notes')
             setHeading('');

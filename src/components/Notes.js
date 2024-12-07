@@ -7,11 +7,12 @@ const Notes = () => {
     const [notes, setNotes] = useState([]);
     const [loading, setLoading] = useState(true);
     const owner = localStorage.getItem('owner');
+    const url = process.env.REACT_APP_BACKEND_URL;
 
     useEffect(() => {
         const fetchNotes = async () => {
             try {
-                const res = await axios.get(`http://localhost:3001/get/${owner}/notes`);
+                const res = await axios.get(`${url}/get/${owner}/notes`);
                 //console.log(res.data);
                 setNotes(res.data.List);
             } catch (error) {
@@ -26,7 +27,7 @@ const Notes = () => {
     const handleDelete = async (id) => {
         try {
           await axios
-            .delete(`http://localhost:3001/${owner}/notes/${id}`)
+            .delete(`${url}/${owner}/notes/${id}`)
             .then(() => {
               //console.log("Income deleted");
               window.location.reload();

@@ -16,6 +16,7 @@ const Expensive = () => {
 
   const owner = localStorage.getItem("owner");
   const type = "expensive"
+  const url = process.env.REACT_APP_BACKEND_URL
 
   useEffect(() => {
     fetchExpensives();
@@ -25,7 +26,7 @@ const Expensive = () => {
     if (owner !== "Unknown User") {
       setLoading(true);
       axios
-        .get(`http://localhost:3001/get/${owner}/${type}`)
+        .get(`${url}/get/${owner}/${type}`)
         .then((res) => {
           //console.log(res.data)
           setDisplayList(res.data.List);
@@ -41,7 +42,7 @@ const Expensive = () => {
   const handleDelete = async (id) => {
     try {
       await axios
-        .delete(`http://localhost:3001/${owner}/${type}/${id}`)
+        .delete(`${url}/${owner}/${type}/${id}`)
         .then(() => {
           //console.log("Income deleted");
           window.location.reload();
@@ -73,7 +74,7 @@ const Expensive = () => {
 
     try{
       setLoading(true)
-      const res = await axios.get(`http://localhost:3001/${owner}/${type}`,{
+      const res = await axios.get(`${url}/${owner}/${type}`,{
         params:{
           category: selectedFilter || 'All',
           searchInput:inputText || '',

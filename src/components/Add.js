@@ -20,10 +20,12 @@ const Add = () => {
   const {type} = useParams();
   //console.log(type)
 
+  const url = process.env.REACT_APP_BACKEND_URL
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/category/${owner}`);
+        const res = await axios.get(`${url}/category/${owner}`);
         setCategories(res.data.categories);
       } catch (error) {
         //console.error('Error fetching categories:', error);
@@ -39,7 +41,7 @@ const Add = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:3001/create`, { name, date, area, paid, due, amount,category, owner, type })
+      .post(`${url}/create`, { name, date, area, paid, due, amount,category, owner, type })
       .then((res) => {
         //console.log(res);
         navigate(`/${type}`);
