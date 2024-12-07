@@ -25,6 +25,7 @@ const Income = () => {
 
   const fetchIncomes = () =>{
     if (owner !== "Unknown User") {
+      console.log(`${url}/get/${owner}/${type}`)
       setLoading(true);
       axios
         .get(`${url}/get/${owner}/${type}`)
